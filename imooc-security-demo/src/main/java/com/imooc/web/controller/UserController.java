@@ -61,7 +61,7 @@ public class UserController {
 		user.setId("1");
 		return user;
 	}
-
+	@ApiOperation(value = "删除用户")
 	@DeleteMapping("/{id:\\d+}")
 	public void delete(@PathVariable String id) {
 		System.out.println(id);

@@ -8,15 +8,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring4all.swagger.EnableSwagger2Doc;
+
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+
+
 /**
- * @author zhailiang
+ * @author libai
  *
  */
+@EnableSwagger2Doc
 @SpringBootApplication
 @RestController
-@EnableSwagger2
 public class DemoApplication {
 
 	/**
