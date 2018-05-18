@@ -11,21 +11,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.net.URL;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import org.springframework.web.context.WebApplicationContext;
+
+import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+
 
 /**
  * @author zhailiang
@@ -44,6 +56,47 @@ public class UserControllerTest {
 	public void setup() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 	}
+	
+	
+	@Autowired
+	private StringRedisTemplate stringRedisTemplate;
+
+	@Test
+	public void test() throws Exception {
+
+		// 保存字符串
+		stringRedisTemplate.opsForValue().set("aaa", "111");
+		Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
+
+    }
+	
+	@Autowired
+	private RedisTemplate redisTemplate;
+	
+	@Test
+	public void test() throws Exception {
+
+		// 保存字符串
+		stringRedisTemplate.opsForValue().set("aaa", "111");
+		Assert.assertEquals("111", stringRedisTemplate.opsForValue().get("aaa"));
+
+    }
+	
+	
+	
+	@Test
+    public void generateAsciiDocs() throws Exception {
+        //    输出Ascii格式
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.ASCIIDOC)
+                .build();
+        Swagger2MarkupConverter.from(new URL("http://localhost:8080/v2/api-docs"))
+                .withConfig(config)
+                .build()
+                .toFolder(Paths.get("src/docs/asciidoc/generated"));
+    }
+
+	
 	
 	@Test
 	public void whenUploadSuccess() throws Exception {
